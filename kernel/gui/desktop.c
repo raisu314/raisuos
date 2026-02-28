@@ -41,7 +41,7 @@ void desktop_init(void) {
 void desktop_draw(void) {
   vbe_info_t *vbe = vbe_get_info();
 
-  /* ADNWS v3.0 Premium Light Gradient (Sky Blue to Pure White) */
+  /* ADNWS v1.0.0 Premium Light Gradient (Sky Blue to Pure White) */
   gfx_draw_gradient_v(0, 0, vbe->width, vbe->height, COLOR_SUB, COLOR_MAIN);
 
   wm_draw_all();
