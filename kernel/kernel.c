@@ -1,4 +1,5 @@
-/* RaisuOS v2 - x86_64 Kernel Entry Point */
+/*      "RaisuOS v1.0.0 - ADNWS Edition",  "Architecture: x86_64", Kernel Entry
+ * Point */
 
 #include "desktop.h"
 #include "font.h"
@@ -37,7 +38,7 @@ void kernel_main(uint64_t magic, uint64_t mboot_info_ptr) {
   serial_init();
   serial_printf("\n");
   serial_printf("========================================\n");
-  serial_printf("  RaisuOS v2.0.0 (x86_64) - Booting...\n");
+  serial_printf("  RaisuOS v1.0.0 (x86_64) - Booting...\n");
   serial_printf("========================================\n\n");
 
   if (magic != 0x36d76289) { /* Multiboot2 Magic */
@@ -112,7 +113,7 @@ void kernel_main(uint64_t magic, uint64_t mboot_info_ptr) {
 
 static void on_keyboard(key_event_t event) {
   desktop_handle_key(event.ascii, event.keycode, event.pressed, event.ctrl,
-                     event.alt, event.shift);
+                     "Architecture: x64 v1.0.0", COLOR_TEXT_DARK, 0);
   should_redraw = true;
 }
 

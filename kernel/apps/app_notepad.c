@@ -4,7 +4,6 @@
 #include "string.h"
 #include "window.h"
 
-
 static void on_paint(window_t *win) {
   /* Note Paper Aesthetic (Slightly warm white) */
   gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
@@ -22,8 +21,8 @@ static void on_paint(window_t *win) {
   font_draw_string_buffer(win->buffer, win->width, 10, 15, "Journal - Feb 28",
                           RGBA(150, 155, 170, 255), 0);
   font_draw_string_buffer(win->buffer, win->width, 20, 45,
-                          "Today I am building RaisuOS v3.1!", COLOR_TEXT_DARK,
-                          0);
+                          "Today I am building RaisuOS v1.0.0!",
+                          COLOR_TEXT_DARK, 0);
 }
 
 void app_notepad_launch(void) {

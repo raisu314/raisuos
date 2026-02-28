@@ -30,7 +30,7 @@ static void sysmon_paint(window_t *win) {
   y += 20;
 
   font_draw_string_buffer(win->buffer, win->width, x, y,
-                          "Architecture: x64 v3.0", COLOR_TEXT_DARK, 0);
+                          "Architecture: x64 v1.0.0", COLOR_TEXT_DARK, 0);
   y += 20;
 
   /* Memory Statistics */

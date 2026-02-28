@@ -5,7 +5,6 @@
 #include "i18n.h"
 #include "string.h"
 
-
 static void about_paint(window_t *win) {
   gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
                        win->height - TITLE_BAR_HEIGHT,
@@ -22,9 +21,9 @@ static void about_paint(window_t *win) {
   y += 60;
 
   const char *lines[] = {
-      "RaisuOS v2.0 - ADNWS Edition",  "Architecture: x86_64",
-      "All Device Native Work System", "(C) 2026 RaisuOS Project",
-      "Zero Linux Dependencies",       NULL};
+      "RaisuOS v1.0.0 - ADNWS Edition", "Architecture: x86_64",
+      "All Device Native Work System",  "(C) 2026 RaisuOS Project",
+      "Zero Linux Dependencies",        NULL};
 
   for (int i = 0; lines[i] != NULL; i++) {
     int len = strlen(lines[i]) * 8;

@@ -26,9 +26,9 @@ static void on_paint(window_t *win) {
                                win->width - 40, 80, 8,
                                RGBA(240, 245, 255, 200));
   font_draw_string_buffer(win->buffer, win->width, 30, 160,
-                          "Subsystem: ADNWS v3.1", COLOR_SUB, 0);
+                          "Subsystem: ADNWS v1.0.0", COLOR_SUB, 0);
   font_draw_string_buffer(win->buffer, win->width, 30, 180,
-                          "Build: 2026.02.28-Premium", RGBA(150, 150, 160, 255),
+                          "Build: 2026.02.28-v1.0.0", RGBA(150, 150, 160, 255),
                           0);
   font_draw_string_buffer(win->buffer, win->width, 30, 200,
                           "Status: Hyper-Enhanced", RGBA(100, 200, 150, 255),

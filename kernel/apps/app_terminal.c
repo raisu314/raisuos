@@ -76,7 +76,7 @@ static void term_execute(term_state_t *state) {
     state->cursor_x = 0;
     state->cursor_y = 0;
   } else if (strcmp(state->input_line, "sysinfo") == 0) {
-    term_print(state, "RaisuOS v2.0 (ADNWS / x86_64)\n");
+    term_print(state, "RaisuOS v1.0.0 (ADNWS / x86_64)\n");
     term_print(state, "Memory: 4096 MB / RAM\n");
   } else if (state->input_len > 0) {
     term_print(state, "Command not found.\n");
