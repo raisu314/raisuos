@@ -8,8 +8,8 @@ This means that whether you boot RaisuOS on a high-end desktop PC or a compatibl
 
 **System Requirements (Hard Enforced):**
 - **Architecture**: x86_64 (64-bit Long Mode)
-- **Minimum RAM**: 4 GB (4096 MB)
-- **Minimum Storage (ROM)**: 64 GB
+- **Minimum RAM**: 4 GB (Strict). Supports up to **1 TB**.
+- **Minimum Storage (ROM)**: 32 GB. Supports up to **8 TB** (Main) / Unlimited (Expansion).
 - **Display**: VBE Compatible Framebuffer (1024x768 minimum)
 
 ## ☁️ Zero-Dependency Local Build System

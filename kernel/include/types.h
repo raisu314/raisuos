@@ -25,8 +25,10 @@ typedef _Bool bool;
 #define NULL ((void *)0)
 #define UNUSED(x) (void)(x)
 
-/* ADNWS Minimum Requirements Definition */
+/* ADNWS Minimum & Dynamic Resource Limits */
 #define ADNWS_MIN_RAM_MB 4096
-#define ADNWS_MIN_ROM_MB 65536
+#define ADNWS_MAX_RAM_GB 1024
+#define ADNWS_MIN_ROM_GB 32
+#define ADNWS_MAX_MAIN_STORAGE_TB 8
 
 #endif
