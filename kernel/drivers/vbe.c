@@ -99,6 +99,8 @@ void vbe_set_pixel(int x, int y, uint32_t color) {
 
 bool vbe_is_portrait(void) { return current_vbe.height > current_vbe.width; }
 
-float vbe_get_aspect_ratio(void) {
-  return (float)current_vbe.width / (float)current_vbe.height;
+uint32_t vbe_get_aspect_ratio(void) {
+  if (current_vbe.height == 0)
+    return 0;
+  return (current_vbe.width * 1000) / current_vbe.height;
 }

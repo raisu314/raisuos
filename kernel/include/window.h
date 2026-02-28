@@ -31,7 +31,7 @@ typedef struct window {
   uint32_t *buffer;
   int desktop_id;
 
-  float anim_progress;
+  uint32_t anim_progress;
   int anim_type;
 
   void *app_data;

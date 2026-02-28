@@ -19,6 +19,6 @@ void vbe_set_pixel(int x, int y, uint32_t color);
 
 /* Responsive Helpers */
 bool vbe_is_portrait(void);
-float vbe_get_aspect_ratio(void);
+uint32_t vbe_get_aspect_ratio(void);
 
 #endif
