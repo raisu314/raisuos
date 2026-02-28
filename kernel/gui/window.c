@@ -169,6 +169,7 @@ void wm_handle_mouse(int mx, int my, bool left, bool right) {
 
 void wm_handle_key(char key, uint8_t keycode, bool pressed, bool ctrl, bool alt,
                    bool shift) {
+  UNUSED(shift);
   if (focused_window && focused_window->on_key) {
     focused_window->on_key(focused_window, key, pressed);
   }

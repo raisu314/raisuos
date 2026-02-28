@@ -70,3 +70,10 @@ void taskbar_handle_mouse(int x, int y, bool left, bool right) {
     }
   }
 }
+
+void taskbar_handle_key(char key, uint8_t keycode, bool pressed) {
+  UNUSED(key);
+  UNUSED(keycode);
+  UNUSED(pressed);
+  /* Handle global taskbar shortcuts if any */
+}

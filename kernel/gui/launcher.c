@@ -6,7 +6,6 @@
 #include "taskbar.h"
 #include "vbe.h"
 
-
 static bool is_open = false;
 
 void launcher_init(void) { is_open = false; }
