@@ -16,45 +16,45 @@ static bool launcher_open = false;
 
 void taskbar_init(void) {
   vbe_info_t *vbe = vbe_get_info();
-  dock_w = vbe->width * 60 / 100; /* Dock takes 60% of width */
+  /* Responsive Dock Width: 60% on landscape, 90% on portrait */
+  int scale = vbe_is_portrait() ? 90 : 60;
+  dock_w = vbe->width * scale / 100;
   dock_x = (vbe->width - dock_w) / 2;
-  tb_y = vbe->height - TASKBAR_HEIGHT - 10; /* Float 10px from bottom */
+  tb_y = vbe->height - TASKBAR_HEIGHT - 10;
 }
 
 void taskbar_draw(void) {
   vbe_info_t *vbe = vbe_get_info();
-  dock_w = vbe->width * 60 / 100;
+  int scale = vbe_is_portrait() ? 90 : 60;
+  dock_w = vbe->width * scale / 100;
   dock_x = (vbe->width - dock_w) / 2;
   tb_y = vbe->height - TASKBAR_HEIGHT - 10;
 
   /* 1. Shadow for the dock */
   gfx_draw_shadow_buffer(vbe->backbuffer, vbe->width, vbe->height, dock_x, tb_y,
-                         dock_w, TASKBAR_HEIGHT, 15, 10);
+                         dock_w, TASKBAR_HEIGHT, 15, 12);
 
-  /* 2. Frost Glass Wall (Blur background area) */
-  gfx_blur_rect(dock_x, tb_y, dock_w, TASKBAR_HEIGHT, 2);
+  /* 2. Frost Glass Wall (Blur) - Enhanced for Light Mode */
+  gfx_blur_rect(dock_x, tb_y, dock_w, TASKBAR_HEIGHT, 3);
 
-  /* 3. Glass Tint */
+  /* 3. "Premium Light" Mica Dock (High-translucency White) */
   gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height, dock_x,
-                               tb_y, dock_w, TASKBAR_HEIGHT, 15,
-                               RGBA(255, 255, 255, 40));
+                               tb_y, dock_w, TASKBAR_HEIGHT, 15, COLOR_MICA);
 
-  /* 4. Launcher Icon (Premium Circle) */
+  /* 4. Launcher Icon (ADNWS Blue Accent) */
   int icon_y = tb_y + (TASKBAR_HEIGHT - 32) / 2;
   gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height,
-                               dock_x + 15, icon_y, 32, 32, 16,
-                               RGBA(64, 128, 255, 220));
-  font_draw_string(dock_x + 15 + 10, icon_y + 8, "R", RGBA(255, 255, 255, 255),
-                   0);
+                               dock_x + 15, icon_y, 32, 32, 16, COLOR_SUB);
+  font_draw_string(dock_x + 15 + 10, icon_y + 8, "R", COLOR_TEXT_DARK, 0);
 
-  /* 5. Desktop Indicator */
+  /* 5. Desktop Indicator (Subtle Blue Text) */
   char d_buf[8];
   itoa(wm_get_desktop() + 1, d_buf, 10);
-  font_draw_string(dock_x + 65, tb_y + 14, "SPACE", RGBA(200, 200, 220, 255),
+  font_draw_string(dock_x + 65, tb_y + 14, "SPACE", RGBA(100, 160, 220, 255),
                    0);
-  font_draw_string(dock_x + 115, tb_y + 14, d_buf, RGBA(255, 255, 255, 255), 0);
+  font_draw_string(dock_x + 120, tb_y + 14, d_buf, COLOR_TEXT_DARK, 0);
 
-  /* 6. Premium Clock */
+  /* 6. Premium Clock (Slate Gray Contrast) */
   uint32_t ticks = timer_get_ticks();
   uint32_t secs = ticks / 1000;
   uint32_t mins = secs / 60;
@@ -63,8 +63,8 @@ void taskbar_draw(void) {
   int tlen = strlen(time_str);
   time_str[tlen++] = ':';
   itoa(secs % 60, time_str + tlen, 10);
-  font_draw_string(dock_x + dock_w - 80, tb_y + 14, time_str,
-                   RGBA(255, 255, 255, 255), 0);
+  font_draw_string(dock_x + dock_w - 90, tb_y + 14, time_str, COLOR_TEXT_DARK,
+                   0);
 }
 
 void taskbar_handle_mouse(int x, int y, bool left, bool right) {

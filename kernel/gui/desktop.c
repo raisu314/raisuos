@@ -41,9 +41,8 @@ void desktop_init(void) {
 void desktop_draw(void) {
   vbe_info_t *vbe = vbe_get_info();
 
-  /* Deep Space Premium Gradient */
-  gfx_draw_gradient_v(0, 0, vbe->width, vbe->height, RGBA(15, 20, 35, 255),
-                      RGBA(45, 60, 100, 255));
+  /* ADNWS v3.0 Premium Light Gradient (Sky Blue to Pure White) */
+  gfx_draw_gradient_v(0, 0, vbe->width, vbe->height, COLOR_SUB, COLOR_MAIN);
 
   wm_draw_all();
   taskbar_draw();

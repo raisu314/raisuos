@@ -5,7 +5,6 @@
 #include "i18n.h"
 #include "string.h"
 
-
 #define MAX_LINES 100
 #define MAX_COLS 60
 
@@ -18,12 +17,11 @@ typedef struct {
 static void editor_paint(window_t *win) {
   editor_state_t *state = (editor_state_t *)win->app_data;
 
-  /* White background */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
-                       win->height - TITLE_BAR_HEIGHT,
-                       RGBA(255, 255, 255, 255));
+  /* Background: ADNWS Pure White */
+  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
+                       COLOR_MAIN);
 
-  int start_y = TITLE_BAR_HEIGHT + 5;
+  int start_y = 10;
 
   for (int r = 0; r < MAX_LINES; r++) {
     if (start_y + r * 12 > win->height)
@@ -33,15 +31,15 @@ static void editor_paint(window_t *win) {
       char ch = state->lines[r][c];
       if (ch) {
         font_draw_char_buffer(win->buffer, win->width, 5 + c * 8,
-                              start_y + r * 12, ch, RGBA(0, 0, 0, 255), 0);
+                              start_y + r * 12, ch, COLOR_TEXT_DARK, 0);
       }
     }
   }
 
+  /* Cursor: Sky Blue Accent */
   if (win->flags & WIN_FLAG_FOCUSED) {
     gfx_fill_rect_buffer(win->buffer, win->width, 5 + state->cursor_x * 8,
-                         start_y + state->cursor_y * 12, 2, 10,
-                         RGBA(0, 0, 0, 255));
+                         start_y + state->cursor_y * 12, 2, 10, COLOR_SUB);
   }
 }
 

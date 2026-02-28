@@ -5,7 +5,6 @@
 #include "i18n.h"
 #include "string.h"
 
-
 #define TERM_COLS 80
 #define TERM_ROWS 25
 
@@ -45,28 +44,26 @@ static void term_print(term_state_t *state, const char *str) {
 static void term_paint(window_t *win) {
   term_state_t *state = (term_state_t *)win->app_data;
 
-  /* Background */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
-                       win->height - TITLE_BAR_HEIGHT, RGBA(30, 30, 30, 255));
+  /* Background: Soft Dark Slate (Mica-Terminal) */
+  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
+                       RGBA(35, 40, 50, 255));
 
-  int start_y = TITLE_BAR_HEIGHT + 5;
+  int start_y = 10;
 
   for (int r = 0; r < TERM_ROWS; r++) {
     for (int c = 0; c < TERM_COLS; c++) {
       char ch = state->buffer[r][c];
       if (ch) {
         font_draw_char_buffer(win->buffer, win->width, 5 + c * 8,
-                              start_y + r * 10, ch, RGBA(200, 200, 200, 255),
-                              0);
+                              start_y + r * 10, ch, COLOR_MAIN, 0);
       }
     }
   }
 
-  /* Draw cursor */
+  /* Draw cursor: ADNWS Sky Blue */
   if (win->flags & WIN_FLAG_FOCUSED) {
     gfx_fill_rect_buffer(win->buffer, win->width, 5 + state->cursor_x * 8,
-                         start_y + state->cursor_y * 10, 8, 10,
-                         RGBA(255, 255, 255, 128));
+                         start_y + state->cursor_y * 10, 8, 10, COLOR_SUB);
   }
 }
 

@@ -2,29 +2,43 @@
 #include "font.h"
 #include "graphics.h"
 #include "i18n.h"
+#include "window.h"
 
+static void on_paint(window_t *win) {
+  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
+                       COLOR_MAIN);
 
-static void settings_paint(window_t *win) {
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
-                       win->height - TITLE_BAR_HEIGHT,
-                       RGBA(255, 255, 255, 255));
+  int y = 20, x = 20;
+  font_draw_string_buffer(win->buffer, win->width, x, y, "ADNWS Settings",
+                          RGBA(0, 100, 200, 255), 0);
+  y += 40;
 
-  int y = TITLE_BAR_HEIGHT + 10;
-  font_draw_string_buffer(win->buffer, win->width, 20, y, "Language: English",
-                          RGBA(0, 0, 0, 255), 0);
-  y += 25;
-  font_draw_string_buffer(win->buffer, win->width, 20, y,
-                          "Theme: Default Frost", RGBA(0, 0, 0, 255), 0);
-  y += 25;
-  font_draw_string_buffer(win->buffer, win->width, 20, y,
-                          "Resolution: 1024x768x32", RGBA(0, 0, 0, 255), 0);
-  y += 25;
+  /* Sidebar / Options */
+  font_draw_string_buffer(win->buffer, win->width, 20, 50, "> Display & Ratios",
+                          COLOR_TEXT_DARK, 0);
+  font_draw_string_buffer(win->buffer, win->width, 20, 80,
+                          "> Raisu-Glass Theme", COLOR_TEXT_DARK, 0);
+  font_draw_string_buffer(win->buffer, win->width, 20, 110, "> Language (i18n)",
+                          COLOR_TEXT_DARK, 0);
+
+  /* ADNWS Sub-Branding Section */
+  gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, 20, 150,
+                               win->width - 40, 80, 8,
+                               RGBA(240, 245, 255, 200));
+  font_draw_string_buffer(win->buffer, win->width, 30, 160,
+                          "Subsystem: ADNWS v3.1", COLOR_SUB, 0);
+  font_draw_string_buffer(win->buffer, win->width, 30, 180,
+                          "Build: 2026.02.28-Premium", RGBA(150, 150, 160, 255),
+                          0);
+  font_draw_string_buffer(win->buffer, win->width, 30, 200,
+                          "Status: Hyper-Enhanced", RGBA(100, 200, 150, 255),
+                          0);
 }
 
 void app_settings_launch(void) {
-  window_t *win = wm_create_window(i18n_get(STR_SETTINGS), 400, 100, 350, 400,
+  window_t *win = wm_create_window("Settings", 300, 200, 350, 260,
                                    WIN_FLAG_MOVABLE | WIN_FLAG_CLOSABLE |
                                        WIN_FLAG_DECORATED);
-  win->on_paint = settings_paint;
-  win->on_close = (window_close_t)wm_destroy_window;
+  if (win)
+    win->on_paint = on_paint;
 }

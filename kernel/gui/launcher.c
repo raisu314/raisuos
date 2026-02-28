@@ -3,6 +3,7 @@
 #include "font.h"
 #include "graphics.h"
 #include "i18n.h"
+#include "icons.h"
 #include "taskbar.h"
 #include "vbe.h"
 
@@ -22,8 +23,9 @@ void launcher_draw(void) {
 
   vbe_info_t *vbe = vbe_get_info();
 
-  int w = 320;
-  int h = 420;
+  /* Responsive Hub: Wider on mobile/portrait */
+  int w = vbe_is_portrait() ? (vbe->width - 40) : 320;
+  int h = vbe_is_portrait() ? (vbe->height * 60 / 100) : 420;
   int x = 20;
   int y = vbe->height - TASKBAR_HEIGHT - h - 30;
 
@@ -32,53 +34,65 @@ void launcher_draw(void) {
                          15, 12);
 
   /* 2. Glass Blur */
-  gfx_blur_rect(x, y, w, h, 3);
+  gfx_blur_rect(x, y, w, h, 4);
 
-  /* 3. Glass Tint (Dark) */
-  gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height, x, y,
-                               w, h, 15, RGBA(30, 30, 40, 180));
+  /* 3. "Premium Light" Mica Hub (High-translucency White) */
+  if (!launcher_visible)
+    return;
 
-  font_draw_string(x + 25, y + 25, "ADNWS Native Hub", RGBA(255, 255, 255, 255),
-                   0);
+  vbe_info_t *vbe = vbe_get_info();
+  int hub_w = vbe_is_portrait() ? vbe->width - 40 : 450;
+  int hub_h = 320;
+  int hub_x = (vbe->width - hub_w) / 2;
+  int hub_y = (vbe->height - hub_h) / 2;
 
-  int item_y = y + 70;
-  const char *items[] = {"Terminal", "Text Editor", "System Monitor", "About"};
+  /* Mica Glass Body with Shadow */
+  gfx_draw_shadow_buffer(vbe->backbuffer, vbe->width, hub_x, hub_y, hub_w,
+                         hub_h, 20);
+  gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height, hub_x,
+                               hub_y, hub_w, hub_h, 16, COLOR_MICA);
 
-  for (int i = 0; i < 4; i++) {
-    /* Item Background (Hover effect imitation: slight light) */
-    gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height,
-                                 x + 10, item_y - 10, w - 20, 40, 8,
-                                 RGBA(255, 255, 255, 20));
+  /* Top Iridescent Glow */
+  gfx_draw_iridescent_line(vbe->backbuffer, vbe->width, hub_x + 20, hub_y,
+                           hub_w - 40);
 
-    font_draw_string(x + 30, item_y, items[i], RGBA(200, 210, 255, 255), 0);
-    item_y += 50;
+  /* Draw App Grid (4x3 layout) */
+  for (int i = 0; i < 11; i++) {
+    int row = i / 4;
+    int col = i % 4;
+    int ax = hub_x + 30 + col * 100;
+    int ay = hub_y + 40 + row * 90;
+
+    icons_draw(vbe->backbuffer, vbe->width, ax + 20, ay, 40,
+               app_entries[i].icon_id);
+    font_draw_string_buffer(vbe->backbuffer, vbe->width, ax + 15, ay + 50,
+                            app_entries[i].name, COLOR_TEXT_DARK, 0);
   }
 }
 
-void launcher_handle_mouse(int mx, int my, bool left, bool right) {
+void launcher_handle_mouse(int x, int y, bool left, bool right) {
   UNUSED(right);
   if (!is_open || !left)
     return;
 
   vbe_info_t *vbe = vbe_get_info();
-  int h = 420;
-  int y_base = vbe->height - TASKBAR_HEIGHT - h - 30;
+  int hub_w = vbe_is_portrait() ? vbe->width - 40 : 450;
+  int hub_h = 320;
+  int hub_x = (vbe->width - hub_w) / 2;
+  int hub_y = (vbe->height - hub_h) / 2;
 
-  if (mx >= 20 && mx <= 340 && my >= y_base && my < y_base + h) {
-    int rel_y = my - (y_base + 70);
-    int index = rel_y / 50;
+  for (int i = 0; i < 11; i++) {
+    int row = i / 4;
+    int col = i % 4;
+    int ax = hub_x + 30 + col * 100;
+    int ay = hub_y + 40 + row * 90;
 
-    if (index == 0)
-      app_terminal_launch();
-    else if (index == 1)
-      app_editor_launch();
-    else if (index == 2)
-      app_sysmon_launch();
-    else if (index == 3)
-      app_about_launch();
-
-    launcher_hide();
-  } else {
-    launcher_hide();
+    if (x >= ax && x < ax + 90 && y >= ay && y < ay + 80) {
+      if (app_entries[i].launch) {
+        app_entries[i].launch();
+        is_open = false;
+      }
+      break;
+    }
   }
 }

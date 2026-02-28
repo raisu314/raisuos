@@ -37,13 +37,20 @@ C_SRCS = $(KERNEL_DIR)/kernel.c \
          $(KERNEL_DIR)/gui/desktop.c \
          $(KERNEL_DIR)/gui/taskbar.c \
          $(KERNEL_DIR)/gui/launcher.c \
-         $(KERNEL_DIR)/apps/app_terminal.c \
-         $(KERNEL_DIR)/apps/app_editor.c \
-         $(KERNEL_DIR)/apps/app_files.c \
-         $(KERNEL_DIR)/apps/app_sysmon.c \
-         $(KERNEL_DIR)/apps/app_settings.c \
-         $(KERNEL_DIR)/apps/app_about.c \
-         $(KERNEL_DIR)/i18n/i18n.c
+          $(KERNEL_DIR)/apps/app_terminal.c \
+          $(KERNEL_DIR)/apps/app_editor.c \
+          $(KERNEL_DIR)/apps/app_files.c \
+          $(KERNEL_DIR)/apps/app_sysmon.c \
+          $(KERNEL_DIR)/apps/app_calculator.c \
+          $(KERNEL_DIR)/apps/app_calendar.c \
+          $(KERNEL_DIR)/apps/app_weather.c \
+          $(KERNEL_DIR)/apps/app_notepad.c \
+          $(KERNEL_DIR)/apps/app_clock.c \
+          $(KERNEL_DIR)/apps/app_music.c \
+          $(KERNEL_DIR)/apps/app_photos.c \
+          $(KERNEL_DIR)/apps/app_settings.c \
+          $(KERNEL_DIR)/apps/app_about.c \
+          $(KERNEL_DIR)/i18n/i18n.c
 
 ASM_OBJS = $(patsubst $(KERNEL_DIR)/arch/x86_64/%.asm,$(BUILD_DIR)/%.o,$(ASM_SRCS))
 C_OBJS = $(patsubst $(KERNEL_DIR)/%.c,$(BUILD_DIR)/%.o,$(C_SRCS))

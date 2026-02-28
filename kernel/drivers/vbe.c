@@ -3,7 +3,6 @@
 #include "serial.h"
 #include "string.h"
 
-
 /* Multiboot2 tag structures */
 struct multiboot_tag {
   uint32_t type;
@@ -96,4 +95,10 @@ void vbe_set_pixel(int x, int y, uint32_t color) {
   if (current_vbe.backbuffer) {
     current_vbe.backbuffer[y * current_vbe.width + x] = color;
   }
+}
+
+bool vbe_is_portrait(void) { return current_vbe.height > current_vbe.width; }
+
+float vbe_get_aspect_ratio(void) {
+  return (float)current_vbe.width / (float)current_vbe.height;
 }

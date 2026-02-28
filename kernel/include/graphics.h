@@ -22,7 +22,23 @@ void gfx_blur_rect(int x, int y, int w, int h, int radius);
 uint32_t gfx_blend(uint32_t foreground, uint32_t background, uint8_t alpha);
 void gfx_fill_rounded_rect_buffer(uint32_t *buffer, int bw, int bh, int x,
                                   int y, int w, int h, int r, uint32_t color);
-void gfx_draw_shadow_buffer(uint32_t *buffer, int bw, int bh, int x, int y,
-                            int w, int h, int r, int strength);
+void gfx_draw_shadow_buffer(uint32_t *buffer, int bw, int x, int y, int w,
+                            int h, int radius);
+
+/* Raisu-Glass Primitives */
+void gfx_draw_iridescent_line(uint32_t *buffer, int bw, int x, int y, int len);
+void gfx_fill_circle_buffer(uint32_t *buffer, int bw, int cx, int cy, int r,
+                            uint32_t color);
+
+#define ADNWS_PALETTE_V3
+#define COLOR_MAIN 0xFFFFFFFF
+#define COLOR_SUB 0xFFBBE2F9
+#define COLOR_TEXT_DARK 0xFF2D3436
+#define COLOR_MICA 0xAAFFFFFF
+#define COLOR_ROSE 0xFFFF7675
+
+/* Iridescent Accents */
+#define COLOR_IRID_START 0xFFBBE2F9
+#define COLOR_IRID_END 0xFFFFADF0
 
 #endif

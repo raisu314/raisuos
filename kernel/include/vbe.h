@@ -17,4 +17,8 @@ vbe_info_t *vbe_get_info(void);
 void vbe_swap_buffers(void);
 void vbe_set_pixel(int x, int y, uint32_t color);
 
+/* Responsive Helpers */
+bool vbe_is_portrait(void);
+float vbe_get_aspect_ratio(void);
+
 #endif

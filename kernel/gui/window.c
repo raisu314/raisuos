@@ -77,32 +77,33 @@ static void draw_window_decorations(window_t *win) {
   if (!(win->flags & WIN_FLAG_DECORATED))
     return;
 
-  /* Premium Title Bar: Slate Blue Depth */
-  uint32_t title_col = (win->flags & WIN_FLAG_FOCUSED) ? RGBA(45, 55, 75, 255)
-                                                       : RGBA(40, 40, 45, 255);
+  /* Premium Light Theme: High-Pure White & Sky Blue (BBE2F9) */
+  uint32_t title_bg = (win->flags & WIN_FLAG_FOCUSED) ? COLOR_SUB : COLOR_MICA;
+  uint32_t body_bg = COLOR_MAIN;
 
-  /* Clear window buffer with transparent rounded base first?
-   * Actually, windows are usually rects, but we'll round the decorations. */
+  /* 1. Base Window Shape (Pure White Body) */
   gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, 0, 0,
-                               win->width, win->height, 12,
-                               RGBA(25, 25, 30, 255));
+                               win->width, win->height, 12, body_bg);
 
+  /* 2. Alpha-Blended Title Bar (Sky Blue Accent) */
   gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, 0, 0,
-                               win->width, TITLE_BAR_HEIGHT, 12, title_col);
-  /* Patch bottom of title bar rounding to keep content area square */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 10, win->width,
-                       TITLE_BAR_HEIGHT - 10, title_col);
+                               win->width, TITLE_BAR_HEIGHT, 12, title_bg);
 
-  uint32_t text_col = RGBA(240, 240, 255, 255);
+  /* Patch bottom of title bar rounding to merge with body */
+  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT - 8,
+                       win->width, 8, title_bg);
+
+  /* 3. Title Text (Dark Slate for Contrast) */
+  uint32_t text_col = COLOR_TEXT_DARK;
   font_draw_string_buffer(win->buffer, win->width, 15,
                           (TITLE_BAR_HEIGHT - 8) / 2, win->title, text_col, 0);
 
-  /* Premium Close Button: Circular Glow */
+  /* 4. Elegant Close Button (Soft Rose) */
   if (win->flags & WIN_FLAG_CLOSABLE) {
     int bx = win->width - 25;
     int by = (TITLE_BAR_HEIGHT - 12) / 2;
     gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, bx, by,
-                                 12, 12, 6, RGBA(255, 80, 80, 255));
+                                 12, 12, 6, RGBA(255, 140, 140, 255));
   }
 }
 
