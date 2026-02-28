@@ -39,13 +39,5 @@ void gdt_init(void) {
   /* User data segment */
   gdt_set_gate(4, 0, 0, 0xF2, 0x00);
 
-  __asm__ volatile("lgdt %0" : : "m"(gdt_ptr));
-
-  /* Reload data segment registers */
-  __asm__ volatile("mov ax, 0x10\n"
-                   "mov ds, ax\n"
-                   "mov es, ax\n"
-                   "mov fs, ax\n"
-                   "mov gs, ax\n"
-                   "mov ss, ax\n");
+  gdt_flush((uint64_t)&gdt_ptr);
 }

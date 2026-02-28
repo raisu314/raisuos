@@ -14,6 +14,25 @@ idt_flush:
     lidt [rdi]
     ret
 
+global gdt_flush
+gdt_flush:
+    ; rdi contains pointer to gdt_ptr
+    lgdt [rdi]
+    ; Reload data segments
+    mov ax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    ; Far jump to reload CS. In 64-bit mode, we can use a far return trick.
+    push 0x08       ; New CS
+    lea rax, [rel .reload_cs]
+    push rax        ; New RIP
+    retfq           ; Far return (64-bit)
+.reload_cs:
+    ret
+
 ; ==============================================================================
 ; I/O Port Helper
 ; ==============================================================================
