@@ -6,7 +6,6 @@
 #include "vbe.h"
 #include "window.h"
 
-
 /* Mouse cursor */
 static const uint8_t cursor_map[12][9] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 0, 0, 0, 0, 0, 0, 0},
@@ -42,9 +41,9 @@ void desktop_init(void) {
 void desktop_draw(void) {
   vbe_info_t *vbe = vbe_get_info();
 
-  /* ADNWS Dynamic Background scaling */
-  gfx_draw_gradient_v(0, 0, vbe->width, vbe->height, RGBA(10, 50, 100, 255),
-                      RGBA(20, 100, 180, 255));
+  /* Deep Space Premium Gradient */
+  gfx_draw_gradient_v(0, 0, vbe->width, vbe->height, RGBA(15, 20, 35, 255),
+                      RGBA(45, 60, 100, 255));
 
   wm_draw_all();
   taskbar_draw();
@@ -62,13 +61,16 @@ void desktop_handle_mouse(int x, int y, bool left, bool right) {
   cursor_x = x;
   cursor_y = y;
 
+  vbe_info_t *vbe = vbe_get_info();
+
   /* Handle drag */
   if (left && !btn_left) {
     btn_left = true;
 
     if (launcher_is_open()) {
       launcher_handle_mouse(x, y, left, right);
-    } else if (y >= (int)(vbe_get_info()->height - TASKBAR_HEIGHT)) {
+    } else if (y >=
+               (int)(vbe->height - TASKBAR_HEIGHT - 20)) { /* Floating area */
       taskbar_handle_mouse(x, y, left, right);
     } else {
       wm_handle_mouse(x, y, left, right);

@@ -77,26 +77,37 @@ static void draw_window_decorations(window_t *win) {
   if (!(win->flags & WIN_FLAG_DECORATED))
     return;
 
-  /* Frosted glass title bar imitation: Light grey */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width,
-                       TITLE_BAR_HEIGHT, RGBA(220, 230, 240, 255));
+  /* Premium Title Bar: Slate Blue Depth */
+  uint32_t title_col = (win->flags & WIN_FLAG_FOCUSED) ? RGBA(45, 55, 75, 255)
+                                                       : RGBA(40, 40, 45, 255);
 
-  uint32_t text_col = (win->flags & WIN_FLAG_FOCUSED)
-                          ? RGBA(0, 0, 0, 255)
-                          : RGBA(100, 100, 100, 255);
-  font_draw_string_buffer(win->buffer, win->width, 10,
+  /* Clear window buffer with transparent rounded base first?
+   * Actually, windows are usually rects, but we'll round the decorations. */
+  gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, 0, 0,
+                               win->width, win->height, 12,
+                               RGBA(25, 25, 30, 255));
+
+  gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, 0, 0,
+                               win->width, TITLE_BAR_HEIGHT, 12, title_col);
+  /* Patch bottom of title bar rounding to keep content area square */
+  gfx_fill_rect_buffer(win->buffer, win->width, 0, 10, win->width,
+                       TITLE_BAR_HEIGHT - 10, title_col);
+
+  uint32_t text_col = RGBA(240, 240, 255, 255);
+  font_draw_string_buffer(win->buffer, win->width, 15,
                           (TITLE_BAR_HEIGHT - 8) / 2, win->title, text_col, 0);
 
-  /* Close Button */
+  /* Premium Close Button: Circular Glow */
   if (win->flags & WIN_FLAG_CLOSABLE) {
-    gfx_draw_rect_buffer(win->buffer, win->width, win->width - BUTTON_SIZE - 10,
-                         (TITLE_BAR_HEIGHT - BUTTON_SIZE) / 2, BUTTON_SIZE,
-                         BUTTON_SIZE, 1, RGBA(255, 50, 50, 255));
+    int bx = win->width - 25;
+    int by = (TITLE_BAR_HEIGHT - 12) / 2;
+    gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, bx, by,
+                                 12, 12, 6, RGBA(255, 80, 80, 255));
   }
 }
 
 void wm_draw_all(void) {
-  /* Draw background desktop here or handled via desktop.c */
+  vbe_info_t *vbe = vbe_get_info();
 
   /* Draw windows backwards (painters algorithm) */
   for (int i = 0; i < window_count; i++) {
@@ -108,16 +119,19 @@ void wm_draw_all(void) {
     if (win->desktop_id != current_desktop && win->desktop_id != -1)
       continue;
 
-    /* Erase background */
+    /* Erase window buffer with "Transparent" (0) */
     memset(win->buffer, 0, win->width * win->height * sizeof(uint32_t));
+
+    /* Shadow on the main VBE buffer BEFORE drawing the window */
+    gfx_draw_shadow_buffer(vbe->backbuffer, vbe->width, vbe->height, win->x,
+                           win->y, win->width, win->height, 12, 10);
 
     draw_window_decorations(win);
 
     if (win->on_paint)
       win->on_paint(win);
 
-    /* Compositing step to the global VBE Double Buffer */
-    vbe_info_t *vbe = vbe_get_info();
+    /* Compositing with Alpha/Transparency Check */
     for (int row = 0; row < win->height; row++) {
       for (int col = 0; col < win->width; col++) {
         int screen_x = win->x + col;
@@ -126,7 +140,7 @@ void wm_draw_all(void) {
         if (screen_x >= 0 && screen_y >= 0 && (uint32_t)screen_x < vbe->width &&
             (uint32_t)screen_y < vbe->height) {
           uint32_t clr = win->buffer[row * win->width + col];
-          if (clr != 0) { /* Treat 0 as transparent */
+          if (clr != 0) {
             vbe_set_pixel(screen_x, screen_y, clr);
           }
         }

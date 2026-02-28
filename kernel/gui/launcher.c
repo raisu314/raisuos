@@ -22,30 +22,37 @@ void launcher_draw(void) {
 
   vbe_info_t *vbe = vbe_get_info();
 
-  int w = 300;
-  int h = 400;
-  int x = 10;
-  int y = vbe->height - TASKBAR_HEIGHT - h - 10;
+  int w = 320;
+  int h = 420;
+  int x = 20;
+  int y = vbe->height - TASKBAR_HEIGHT - h - 30;
 
-  /* Launcher Box */
-  gfx_fill_rect(x, y, w, h, RGBA(240, 245, 250, 230));
-  gfx_draw_rect(x, y, w, h, 2, RGBA(200, 200, 200, 255));
+  /* 1. Shadow */
+  gfx_draw_shadow_buffer(vbe->backbuffer, vbe->width, vbe->height, x, y, w, h,
+                         15, 12);
 
-  font_draw_string(x + 20, y + 20, "RaisuOS Applications", RGBA(0, 0, 0, 255),
+  /* 2. Glass Blur */
+  gfx_blur_rect(x, y, w, h, 3);
+
+  /* 3. Glass Tint (Dark) */
+  gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height, x, y,
+                               w, h, 15, RGBA(30, 30, 40, 180));
+
+  font_draw_string(x + 25, y + 25, "ADNWS Native Hub", RGBA(255, 255, 255, 255),
                    0);
 
-  int item_y = y + 50;
+  int item_y = y + 70;
+  const char *items[] = {"Terminal", "Text Editor", "System Monitor", "About"};
 
-  /* App List */
-  font_draw_string(x + 20, item_y, "1. Terminal", RGBA(0, 0, 200, 255), 0);
-  item_y += 30;
-  font_draw_string(x + 20, item_y, "2. Text Editor", RGBA(0, 0, 200, 255), 0);
-  item_y += 30;
-  font_draw_string(x + 20, item_y, "3. System Monitor", RGBA(0, 0, 200, 255),
-                   0);
-  item_y += 30;
-  font_draw_string(x + 20, item_y, "4. About", RGBA(0, 0, 200, 255), 0);
-  item_y += 30;
+  for (int i = 0; i < 4; i++) {
+    /* Item Background (Hover effect imitation: slight light) */
+    gfx_fill_rounded_rect_buffer(vbe->backbuffer, vbe->width, vbe->height,
+                                 x + 10, item_y - 10, w - 20, 40, 8,
+                                 RGBA(255, 255, 255, 20));
+
+    font_draw_string(x + 30, item_y, items[i], RGBA(200, 210, 255, 255), 0);
+    item_y += 50;
+  }
 }
 
 void launcher_handle_mouse(int mx, int my, bool left, bool right) {
@@ -54,25 +61,24 @@ void launcher_handle_mouse(int mx, int my, bool left, bool right) {
     return;
 
   vbe_info_t *vbe = vbe_get_info();
-  int h = 400;
-  int y_start = vbe->height - TASKBAR_HEIGHT - h - 10 + 50;
+  int h = 420;
+  int y_base = vbe->height - TASKBAR_HEIGHT - h - 30;
 
-  if (mx >= 10 && mx <= 310) {
-    if (my >= y_start && my < y_start + 30) {
+  if (mx >= 20 && mx <= 340 && my >= y_base && my < y_base + h) {
+    int rel_y = my - (y_base + 70);
+    int index = rel_y / 50;
+
+    if (index == 0)
       app_terminal_launch();
-      launcher_hide();
-    } else if (my >= y_start + 30 && my < y_start + 60) {
+    else if (index == 1)
       app_editor_launch();
-      launcher_hide();
-    } else if (my >= y_start + 60 && my < y_start + 90) {
+    else if (index == 2)
       app_sysmon_launch();
-      launcher_hide();
-    } else if (my >= y_start + 90 && my < y_start + 120) {
+    else if (index == 3)
       app_about_launch();
-      launcher_hide();
-    }
+
+    launcher_hide();
   } else {
-    /* Click outside launcher closes it */
     launcher_hide();
   }
 }

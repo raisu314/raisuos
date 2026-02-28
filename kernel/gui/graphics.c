@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "string.h"
 
 void gfx_fill_rect(int x, int y, int w, int h, uint32_t color) {
   vbe_info_t *vbe = vbe_get_info();
@@ -111,6 +112,95 @@ void gfx_blur_rect(int x, int y, int w, int h, int radius) {
       if (count > 0) {
         uint32_t final_col = RGBA(r / count, g / count, b / count, 255);
         vbe->backbuffer[i * vbe->width + j] = final_col;
+      }
+    }
+  }
+}
+
+/* Alpha blending for two colors */
+uint32_t gfx_blend(uint32_t foreground, uint32_t background, uint8_t alpha) {
+  uint32_t r_f = (foreground >> 16) & 0xFF, g_f = (foreground >> 8) & 0xFF,
+           b_f = foreground & 0xFF;
+  uint32_t r_b = (background >> 16) & 0xFF, g_b = (background >> 8) & 0xFF,
+           b_b = background & 0xFF;
+
+  uint32_t r = (r_f * alpha + r_b * (255 - alpha)) / 255;
+  uint32_t g = (g_f * alpha + g_b * (255 - alpha)) / 255;
+  uint32_t b = (b_f * alpha + b_b * (255 - alpha)) / 255;
+
+  return RGBA(r, g, b, 255);
+}
+
+void gfx_fill_rounded_rect_buffer(uint32_t *buffer, int bw, int bh, int x,
+                                  int y, int w, int h, int r, uint32_t color) {
+  for (int i = 0; i < h; i++) {
+    int py = y + i;
+    if (py < 0 || py >= bh)
+      continue;
+    for (int j = 0; j < w; j++) {
+      int px = x + j;
+      if (px < 0 || px >= bw)
+        continue;
+
+      bool inside = true;
+      /* Check corners */
+      if (j < r && i < r) { /* Top Left */
+        if ((j - r) * (j - r) + (i - r) * (i - r) > r * r)
+          inside = false;
+      } else if (j >= w - r && i < r) { /* Top Right */
+        if ((j - (w - r - 1)) * (j - (w - r - 1)) + (i - r) * (i - r) > r * r)
+          inside = false;
+      } else if (j < r && i >= h - r) { /* Bottom Left */
+        if ((j - r) * (j - r) + (i - (h - r - 1)) * (i - (h - r - 1)) > r * r)
+          inside = false;
+      } else if (j >= w - r && i >= h - r) { /* Bottom Right */
+        if ((j - (w - r - 1)) * (j - (w - r - 1)) +
+                (i - (h - r - 1)) * (i - (h - r - 1)) >
+            r * r)
+          inside = false;
+      }
+
+      if (inside) {
+        buffer[py * bw + px] = color;
+      }
+    }
+  }
+}
+
+void gfx_draw_shadow_buffer(uint32_t *buffer, int bw, int bh, int x, int y,
+                            int w, int h, int r, int strength) {
+  UNUSED(r);
+  /* Draw a subtle dark glow around the rect */
+  for (int i = -strength; i < h + strength; i++) {
+    int py = y + i;
+    if (py < 0 || py >= bh)
+      continue;
+    for (int j = -strength; j < w + strength; j++) {
+      int px = x + j;
+      if (px < 0 || px >= bw)
+        continue;
+
+      /* Don't draw over the element itself */
+      if (i >= 0 && i < h && j >= 0 && j < w)
+        continue;
+
+      int dist_x = 0;
+      if (j < 0)
+        dist_x = -j;
+      else if (j >= w)
+        dist_x = j - w + 1;
+
+      int dist_y = 0;
+      if (i < 0)
+        dist_y = -i;
+      else if (i >= h)
+        dist_y = i - h + 1;
+
+      int dist = (dist_x > dist_y) ? dist_x : dist_y;
+
+      if (dist <= strength) {
+        uint8_t alpha = (strength - dist) * 40 / strength;
+        buffer[py * bw + px] = gfx_blend(0x000000, buffer[py * bw + px], alpha);
       }
     }
   }
