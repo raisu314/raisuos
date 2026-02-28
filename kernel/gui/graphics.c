@@ -59,23 +59,24 @@ void gfx_draw_line(int x0, int y0, int x1, int y1, uint32_t color) {
   }
 }
 
-/* Linear color interpolation */
-static uint32_t interpolate_color(uint32_t c1, uint32_t c2, float t) {
-  uint8_t r1 = (c1 >> 16) & 0xFF, g1 = (c1 >> 8) & 0xFF, b1 = c1 & 0xFF;
-  uint8_t r2 = (c2 >> 16) & 0xFF, g2 = (c2 >> 8) & 0xFF, b2 = c2 & 0xFF;
+/* Linear color interpolation (Integer based) */
+static uint32_t interpolate_color(uint32_t c1, uint32_t c2, int t, int max) {
+  uint32_t r1 = (c1 >> 16) & 0xFF, g1 = (c1 >> 8) & 0xFF, b1 = c1 & 0xFF;
+  uint32_t r2 = (c2 >> 16) & 0xFF, g2 = (c2 >> 8) & 0xFF, b2 = c2 & 0xFF;
 
-  uint8_t r = r1 + (r2 - r1) * t;
-  uint8_t g = g1 + (g2 - g1) * t;
-  uint8_t b = b1 + (b2 - b1) * t;
+  uint32_t r = r1 + (r2 - r1) * t / max;
+  uint32_t g = g1 + (g2 - g1) * t / max;
+  uint32_t b = b1 + (b2 - b1) * t / max;
 
   return RGBA(r, g, b, 255);
 }
 
 void gfx_draw_gradient_v(int x, int y, int w, int h, uint32_t top_color,
                          uint32_t bot_color) {
+  if (h <= 1)
+    return;
   for (int i = 0; i < h; i++) {
-    float t = (float)i / (float)(h - 1);
-    uint32_t color = interpolate_color(top_color, bot_color, t);
+    uint32_t color = interpolate_color(top_color, bot_color, i, h - 1);
     gfx_fill_rect(x, y + i, w, 1, color);
   }
 }

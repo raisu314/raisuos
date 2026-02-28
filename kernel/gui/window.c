@@ -4,7 +4,6 @@
 #include "heap.h"
 #include "string.h"
 
-
 static window_t windows[MAX_WINDOWS];
 static int window_count = 0;
 static window_t *focused_window = NULL;
@@ -41,7 +40,7 @@ window_t *wm_create_window(const char *title, int x, int y, int w, int h,
   memset(win->buffer, 0, buf_size);
 
   win->desktop_id = current_desktop;
-  win->anim_progress = 0.0f;
+  win->anim_progress = 0;
   win->anim_type = 1; /* Opening */
 
   wm_focus_window(win);

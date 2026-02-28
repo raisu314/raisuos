@@ -24,6 +24,7 @@ C_SRCS = $(KERNEL_DIR)/kernel.c \
          $(KERNEL_DIR)/arch/x86_64/gdt.c \
          $(KERNEL_DIR)/arch/x86_64/idt.c \
          $(KERNEL_DIR)/lib/string.c \
+         $(KERNEL_DIR)/lib/math.c \
          $(KERNEL_DIR)/mm/heap.c \
          $(KERNEL_DIR)/drivers/timer.c \
          $(KERNEL_DIR)/drivers/serial.c \

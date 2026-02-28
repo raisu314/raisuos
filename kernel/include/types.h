@@ -16,9 +16,11 @@ typedef uint64_t uintptr_t;
 typedef int64_t ssize_t;
 typedef int64_t intptr_t;
 
-typedef int bool;
+#ifndef __cplusplus
+typedef _Bool bool;
 #define true 1
 #define false 0
+#endif
 
 #define NULL ((void *)0)
 #define UNUSED(x) (void)(x)
