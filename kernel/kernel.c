@@ -17,7 +17,6 @@
 #include "vbe.h"
 #include "window.h"
 
-
 /*
  * Heap configuration for x64
  * Place heap at 16MB mark, assign 8MB size for OS data
@@ -52,8 +51,8 @@ void kernel_main(uint64_t magic, uint64_t mboot_info_ptr) {
 
   /* Enforce ADNWS Hardware Minimums */
   serial_printf("[ADNWS] Verifying hardware constraints...\n");
-  serial_printf("[ADNWS] Target: Minimum %d MB RAM, %d MB ROM\n",
-                ADNWS_MIN_RAM_MB, ADNWS_MIN_ROM_MB);
+  serial_printf("[ADNWS] Target: Minimum %d MB RAM, %d GB ROM\n",
+                ADNWS_MIN_RAM_MB, ADNWS_MIN_ROM_GB);
   serial_printf("[ADNWS] -> Hardware Verified API Check Passed.\n");
 
   serial_printf("[GDT] Initializing 64-bit GDT...\n");
