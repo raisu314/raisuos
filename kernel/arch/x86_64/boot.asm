@@ -20,7 +20,7 @@ header_start:
     ; Checksum
     dd 0x100000000 - (0xE85250D6 + 0 + (header_end - header_start))
 
-    ; Optional Framebuffer tag
+    ; Framebuffer tag (Type 5)
     align 8
     dw 5                         ; Type: Framebuffer
     dw 0                         ; Flags
@@ -44,7 +44,7 @@ p4_table:
 p3_table:
     resb 4096
 p2_table:
-    resb 4096
+    resb 4096 * 4 ; 4 tables to map 4GB
 stack_bottom:
     resb 16384 ; 16 KB stack
 stack_top:
@@ -53,7 +53,7 @@ section .rodata
 gdt64:
     dq 0 ; zero entry
 .code: equ $ - gdt64
-    ; CS: Exec/Read, Long Mode
+    ; CS: Exec/Read, Long Mode (L=1, D=0)
     dq (1<<43) | (1<<44) | (1<<47) | (1<<53)
 .data: equ $ - gdt64
     ; DS: Read/Write
@@ -69,27 +69,45 @@ _start:
     mov edi, eax    ; Multiboot magic
     mov esi, ebx    ; Multiboot info pointer
 
-    ; Set up minimal page tables for 64-bit mode
-    ; Identity map the first 2MB (huge page)
+    ; Set up 4-level paging
+    ; p4[0] -> p3
     mov eax, p3_table
     or eax, 0b11 ; present + writable
     mov [p4_table], eax
 
+    ; Map 4GB in p3
+    ; p3[0..3] -> p2_table[0..3]
     mov eax, p2_table
     or eax, 0b11
     mov [p3_table], eax
+    
+    add eax, 4096
+    mov [p3_table + 8], eax
+    
+    add eax, 4096
+    mov [p3_table + 16], eax
+    
+    add eax, 4096
+    mov [p3_table + 24], eax
 
-    ; 2MB huge page covering 0-2MB
-    mov eax, 0
+    ; Identity map 4GB using 2MB pages (2048 entries)
+    mov ecx, 0
+.map_p2:
+    mov eax, 0x200000
+    mul ecx ; edx:eax = 2MB * ecx
     or eax, 0b10000011 ; present + writable + huge
-    mov [p2_table], eax
+    mov [p2_table + ecx * 8], eax
+    mov [p2_table + ecx * 8 + 4], edx ; Write upper 32 bits
+    inc ecx
+    cmp ecx, 2048
+    jne .map_p2
 
-    ; Enable Physical Address Extension (PAE)
+    ; Enable PAE
     mov eax, cr4
     or eax, 1 << 5
     mov cr4, eax
 
-    ; Load P4 to CR3
+    ; Load CR3
     mov eax, p4_table
     mov cr3, eax
 
@@ -107,12 +125,11 @@ _start:
     ; Load 64-bit GDT
     lgdt [gdt64_pointer]
 
-    ; Jump to 64-bit code segment
+    ; Jump to 64-bit
     jmp gdt64.code:long_mode_start
 
 bits 64
 long_mode_start:
-    ; Update segment selectors
     mov ax, gdt64.data
     mov ds, ax
     mov es, ax
@@ -120,12 +137,7 @@ long_mode_start:
     mov gs, ax
     mov ss, ax
 
-    ; Clear frame pointer
     xor rbp, rbp
-
-    ; Boot parameters are already in rdi and rsi because we 
-    ; stored them in edi and esi. The upper 32 bits are correctly zero.
-    ; Call the compiled C kernel entry
     call kernel_main
 
 .hlt:
