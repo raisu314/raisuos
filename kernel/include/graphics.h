@@ -22,8 +22,8 @@ void gfx_blur_rect(int x, int y, int w, int h, int radius);
 uint32_t gfx_blend(uint32_t foreground, uint32_t background, uint8_t alpha);
 void gfx_fill_rounded_rect_buffer(uint32_t *buffer, int bw, int bh, int x,
                                   int y, int w, int h, int r, uint32_t color);
-void gfx_draw_shadow_buffer(uint32_t *buffer, int bw, int x, int y, int w,
-                            int h, int radius);
+void gfx_draw_shadow_buffer(uint32_t *buffer, int bw, int bh, int x, int y,
+                            int w, int h, int radius, int strength);
 
 /* Raisu-Glass Primitives */
 void gfx_draw_iridescent_line(uint32_t *buffer, int bw, int x, int y, int len);
