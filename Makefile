@@ -33,6 +33,8 @@ C_SRCS = $(KERNEL_DIR)/kernel.c \
          $(KERNEL_DIR)/drivers/vbe.c \
          $(KERNEL_DIR)/gui/graphics.c \
          $(KERNEL_DIR)/gui/font.c \
+         $(KERNEL_DIR)/gui/font_data_en.c \
+         $(KERNEL_DIR)/gui/font_data_ja.c \
          $(KERNEL_DIR)/gui/window.c \
          $(KERNEL_DIR)/gui/desktop.c \
          $(KERNEL_DIR)/gui/taskbar.c \
