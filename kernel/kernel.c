@@ -1,5 +1,4 @@
-/*      "RaisuOS v1.0.0 - ADNWS Edition",  "Architecture: x86_64", Kernel Entry
- * Point */
+/* RaisuOS v1.0.0 - x86_64 Kernel Entry Point */
 
 #include "desktop.h"
 #include "font.h"
@@ -113,7 +112,7 @@ void kernel_main(uint64_t magic, uint64_t mboot_info_ptr) {
 
 static void on_keyboard(key_event_t event) {
   desktop_handle_key(event.ascii, event.keycode, event.pressed, event.ctrl,
-                     "Architecture: x64 v1.0.0", COLOR_TEXT_DARK, 0);
+                     event.alt, event.shift);
   should_redraw = true;
 }
 
