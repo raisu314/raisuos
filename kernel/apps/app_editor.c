@@ -18,8 +18,8 @@ static void editor_paint(window_t *win) {
   editor_state_t *state = (editor_state_t *)win->app_data;
 
   /* Background: ADNWS Pure White */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       COLOR_MAIN);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, COLOR_MAIN);
 
   int start_y = 10;
 
@@ -30,7 +30,7 @@ static void editor_paint(window_t *win) {
     for (int c = 0; c < MAX_COLS; c++) {
       char ch = state->lines[r][c];
       if (ch) {
-        font_draw_char_buffer(win->buffer, win->width, 5 + c * 8,
+        font_draw_char_buffer(win->buffer, win->width, win->height, 5 + c * 8,
                               start_y + r * 12, ch, COLOR_TEXT_DARK, 0);
       }
     }
@@ -38,7 +38,8 @@ static void editor_paint(window_t *win) {
 
   /* Cursor: Sky Blue Accent */
   if (win->flags & WIN_FLAG_FOCUSED) {
-    gfx_fill_rect_buffer(win->buffer, win->width, 5 + state->cursor_x * 8,
+    gfx_fill_rect_buffer(win->buffer, win->width, win->height,
+                         5 + state->cursor_x * 8,
                          start_y + state->cursor_y * 12, 2, 10, COLOR_SUB);
   }
 }

@@ -5,8 +5,8 @@
 #include "window.h"
 
 static void on_paint(window_t *win) {
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       COLOR_MAIN);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, COLOR_MAIN);
 
   int y = 20, x = 20;
   font_draw_string_buffer(win->buffer, win->width, x, y, "ADNWS Settings",

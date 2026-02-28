@@ -6,16 +6,17 @@
 
 static void on_paint(window_t *win) {
   /* Note Paper Aesthetic (Slightly warm white) */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       RGBA(255, 255, 250, 255));
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, RGBA(255, 255, 250, 255));
 
   /* Iridescent Accent */
-  gfx_draw_iridescent_line(win->buffer, win->width, 0, 0, win->width);
+  gfx_draw_iridescent_line(win->buffer, win->width, win->height, 0, 0,
+                           win->width);
 
   /* Ruling Lines */
   for (int i = 0; i < 15; i++) {
-    gfx_fill_rect_buffer(win->buffer, win->width, 0, 40 + i * 20, win->width, 1,
-                         RGBA(230, 235, 245, 255));
+    gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 40 + i * 20,
+                         win->width, 1, RGBA(230, 235, 245, 255));
   }
 
   font_draw_string_buffer(win->buffer, win->width, 10, 15, "Journal - Feb 28",

@@ -6,17 +6,18 @@
 #include "string.h"
 
 static void about_paint(window_t *win) {
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
-                       win->height - TITLE_BAR_HEIGHT,
-                       RGBA(255, 255, 255, 255));
+  gfx_fill_rect_buffer(
+      win->buffer, win->width, win->height, 0, TITLE_BAR_HEIGHT, win->width,
+      win->height - TITLE_BAR_HEIGHT, RGBA(255, 255, 255, 255));
 
   int y = TITLE_BAR_HEIGHT + 20;
 
   /* Draw RaisuOS Logo mock */
-  gfx_fill_rect_buffer(win->buffer, win->width, win->width / 2 - 20, y, 40, 40,
-                       RGBA(50, 150, 250, 255));
-  font_draw_char_buffer(win->buffer, win->width, win->width / 2 - 4, y + 16,
-                        'R', RGBA(255, 255, 255, 255), 0);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height,
+                       win->width / 2 - 20, y, 40, 40, RGBA(50, 150, 250, 255));
+  font_draw_char_buffer(win->buffer, win->width, win->height,
+                        win->width / 2 - 4, y + 16, 'R',
+                        RGBA(255, 255, 255, 255), 0);
 
   y += 60;
 
@@ -27,8 +28,9 @@ static void about_paint(window_t *win) {
 
   for (int i = 0; lines[i] != NULL; i++) {
     int len = strlen(lines[i]) * 8;
-    font_draw_string_buffer(win->buffer, win->width, (win->width - len) / 2, y,
-                            lines[i], RGBA(0, 0, 0, 255), 0);
+    font_draw_string_buffer(win->buffer, win->width, win->height,
+                            (win->width - len) / 2, y, lines[i],
+                            RGBA(0, 0, 0, 255), 0);
     y += 20;
   }
 }

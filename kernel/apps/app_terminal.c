@@ -45,8 +45,8 @@ static void term_paint(window_t *win) {
   term_state_t *state = (term_state_t *)win->app_data;
 
   /* Background: Soft Dark Slate (Mica-Terminal) */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       RGBA(35, 40, 50, 255));
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, RGBA(35, 40, 50, 255));
 
   int start_y = 10;
 
@@ -54,7 +54,7 @@ static void term_paint(window_t *win) {
     for (int c = 0; c < TERM_COLS; c++) {
       char ch = state->buffer[r][c];
       if (ch) {
-        font_draw_char_buffer(win->buffer, win->width, 5 + c * 8,
+        font_draw_char_buffer(win->buffer, win->width, win->height, 5 + c * 8,
                               start_y + r * 10, ch, COLOR_MAIN, 0);
       }
     }
@@ -62,7 +62,8 @@ static void term_paint(window_t *win) {
 
   /* Draw cursor: ADNWS Sky Blue */
   if (win->flags & WIN_FLAG_FOCUSED) {
-    gfx_fill_rect_buffer(win->buffer, win->width, 5 + state->cursor_x * 8,
+    gfx_fill_rect_buffer(win->buffer, win->width, win->height,
+                         5 + state->cursor_x * 8,
                          start_y + state->cursor_y * 10, 8, 10, COLOR_SUB);
   }
 }

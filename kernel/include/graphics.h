@@ -8,11 +8,11 @@
 #define RGBA(r, g, b, a) (((a) << 24) | ((r) << 16) | ((g) << 8) | (b))
 
 void gfx_fill_rect(int x, int y, int w, int h, uint32_t color);
-void gfx_fill_rect_buffer(uint32_t *buffer, int bw, int x, int y, int w, int h,
-                          uint32_t color);
+void gfx_fill_rect_buffer(uint32_t *buffer, int bw, int bh, int x, int y, int w,
+                          int h, uint32_t color);
 void gfx_draw_rect(int x, int y, int w, int h, int thickness, uint32_t color);
-void gfx_draw_rect_buffer(uint32_t *buffer, int bw, int x, int y, int w, int h,
-                          int thickness, uint32_t color);
+void gfx_draw_rect_buffer(uint32_t *buffer, int bw, int bh, int x, int y, int w,
+                          int h, int thickness, uint32_t color);
 void gfx_draw_line(int x0, int y0, int x1, int y1, uint32_t color);
 
 /* Advanced Rendering */
@@ -26,9 +26,10 @@ void gfx_draw_shadow_buffer(uint32_t *buffer, int bw, int bh, int x, int y,
                             int w, int h, int radius, int strength);
 
 /* Raisu-Glass Primitives */
-void gfx_draw_iridescent_line(uint32_t *buffer, int bw, int x, int y, int len);
-void gfx_fill_circle_buffer(uint32_t *buffer, int bw, int cx, int cy, int r,
-                            uint32_t color);
+void gfx_draw_iridescent_line(uint32_t *buffer, int bw, int bh, int x, int y,
+                              int len);
+void gfx_fill_circle_buffer(uint32_t *buffer, int bw, int bh, int cx, int cy,
+                            int r, uint32_t color);
 
 #define ADNWS_PALETTE_V3
 #define COLOR_MAIN 0xFFFFFFFF

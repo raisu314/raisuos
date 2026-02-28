@@ -16,6 +16,7 @@
 #define ICON_PHOTOS 10
 #define ICON_SETTINGS 11
 
-void icons_draw(uint32_t *buffer, int bw, int x, int y, int size, int icon_id);
+void icons_draw(uint32_t *buffer, int bw, int bh, int x, int y, int size,
+                int icon_id);
 
 #endif

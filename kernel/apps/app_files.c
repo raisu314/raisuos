@@ -4,9 +4,9 @@
 #include "i18n.h"
 
 static void files_paint(window_t *win) {
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
-                       win->height - TITLE_BAR_HEIGHT,
-                       RGBA(240, 240, 240, 255));
+  gfx_fill_rect_buffer(
+      win->buffer, win->width, win->height, 0, TITLE_BAR_HEIGHT, win->width,
+      win->height - TITLE_BAR_HEIGHT, RGBA(240, 240, 240, 255));
 
   int y = TITLE_BAR_HEIGHT + 10;
   font_draw_string_buffer(win->buffer, win->width, 10, y, "A:/ (initrd)",

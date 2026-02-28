@@ -90,12 +90,12 @@ static void draw_window_decorations(window_t *win) {
                                win->width, TITLE_BAR_HEIGHT, 12, title_bg);
 
   /* Patch bottom of title bar rounding to merge with body */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT - 8,
-                       win->width, 8, title_bg);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0,
+                       TITLE_BAR_HEIGHT - 8, win->width, 8, title_bg);
 
   /* 3. Title Text (Dark Slate for Contrast) */
   uint32_t text_col = COLOR_TEXT_DARK;
-  font_draw_string_buffer(win->buffer, win->width, 15,
+  font_draw_string_buffer(win->buffer, win->width, win->height, 15,
                           (TITLE_BAR_HEIGHT - 8) / 2, win->title, text_col, 0);
 
   /* 4. Elegant Close Button (Soft Rose) */

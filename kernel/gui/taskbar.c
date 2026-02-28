@@ -12,6 +12,7 @@
 
 static int dock_x = 0;
 static int dock_w = 0;
+static int tb_y = 0;
 static bool launcher_open = false;
 
 void taskbar_init(void) {

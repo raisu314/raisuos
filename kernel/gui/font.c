@@ -2,7 +2,6 @@
 #include "string.h"
 #include "vbe.h"
 
-
 /* Simple 8x8 bitmap font (subset) */
 static const uint8_t font8x8[128][8] = {
     [0] = {0, 0, 0, 0, 0, 0, 0, 0}, /* Space */
@@ -117,23 +116,29 @@ void font_draw_string(int x, int y, const char *str, uint32_t fg, uint32_t bg) {
   }
 }
 
-void font_draw_char_buffer(uint32_t *buffer, int bw, int x, int y, char c,
-                           uint32_t fg, uint32_t bg) {
+void font_draw_char_buffer(uint32_t *buffer, int bw, int bh, int x, int y,
+                           char c, uint32_t fg, uint32_t bg) {
   if ((uint8_t)c >= 128)
     c = '?';
   for (int row = 0; row < 8; row++) {
+    int py = y + row;
+    if (py < 0 || py >= bh)
+      continue;
     uint8_t row_data = font8x8[(uint8_t)c][row];
     for (int col = 0; col < 8; col++) {
+      int px = x + col;
+      if (px < 0 || px >= bw)
+        continue;
       if (row_data & (1 << (7 - col))) {
-        buffer[(y + row) * bw + (x + col)] = fg;
+        buffer[py * bw + px] = fg;
       } else if (bg != 0) {
-        buffer[(y + row) * bw + (x + col)] = bg;
+        buffer[py * bw + px] = bg;
       }
     }
   }
 }
 
-void font_draw_string_buffer(uint32_t *buffer, int bw, int x, int y,
+void font_draw_string_buffer(uint32_t *buffer, int bw, int bh, int x, int y,
                              const char *str, uint32_t fg, uint32_t bg) {
   int cx = x;
   while (*str) {
@@ -141,7 +146,7 @@ void font_draw_string_buffer(uint32_t *buffer, int bw, int x, int y,
       cx = x;
       y += 10;
     } else {
-      font_draw_char_buffer(buffer, bw, cx, y, *str, fg, bg);
+      font_draw_char_buffer(buffer, bw, bh, cx, y, *str, fg, bg);
       cx += 8;
     }
     str++;

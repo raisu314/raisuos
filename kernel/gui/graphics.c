@@ -13,11 +13,17 @@ void gfx_fill_rect(int x, int y, int w, int h, uint32_t color) {
   }
 }
 
-void gfx_fill_rect_buffer(uint32_t *buffer, int bw, int x, int y, int w, int h,
-                          uint32_t color) {
+void gfx_fill_rect_buffer(uint32_t *buffer, int bw, int bh, int x, int y, int w,
+                          int h, uint32_t color) {
   for (int i = 0; i < h; i++) {
+    int py = y + i;
+    if (py < 0 || py >= bh)
+      continue;
     for (int j = 0; j < w; j++) {
-      buffer[(y + i) * bw + (x + j)] = color;
+      int px = x + j;
+      if (px < 0 || px >= bw)
+        continue;
+      buffer[py * bw + px] = color;
     }
   }
 }
@@ -29,12 +35,14 @@ void gfx_draw_rect(int x, int y, int w, int h, int thickness, uint32_t color) {
   gfx_fill_rect(x + w - thickness, y, thickness, h, color);
 }
 
-void gfx_draw_rect_buffer(uint32_t *buffer, int bw, int x, int y, int w, int h,
-                          int thickness, uint32_t color) {
-  gfx_fill_rect_buffer(buffer, bw, x, y, w, thickness, color);
-  gfx_fill_rect_buffer(buffer, bw, x, y + h - thickness, w, thickness, color);
-  gfx_fill_rect_buffer(buffer, bw, x, y, thickness, h, color);
-  gfx_fill_rect_buffer(buffer, bw, x + w - thickness, y, thickness, h, color);
+void gfx_draw_rect_buffer(uint32_t *buffer, int bw, int bh, int x, int y, int w,
+                          int h, int thickness, uint32_t color) {
+  gfx_fill_rect_buffer(buffer, bw, bh, x, y, w, thickness, color);
+  gfx_fill_rect_buffer(buffer, bw, bh, x, y + h - thickness, w, thickness,
+                       color);
+  gfx_fill_rect_buffer(buffer, bw, bh, x, y, thickness, h, color);
+  gfx_fill_rect_buffer(buffer, bw, bh, x + w - thickness, y, thickness, h,
+                       color);
 }
 
 void gfx_draw_line(int x0, int y0, int x1, int y1, uint32_t color) {
@@ -131,22 +139,34 @@ uint32_t gfx_blend(uint32_t foreground, uint32_t background, uint8_t alpha) {
   return RGBA(r, g, b, 255);
 }
 
-void gfx_draw_iridescent_line(uint32_t *buffer, int bw, int x, int y, int len) {
+void gfx_draw_iridescent_line(uint32_t *buffer, int bw, int bh, int x, int y,
+                              int len) {
+  if (y < 0 || y >= bh)
+    return;
   for (int i = 0; i < len; i++) {
+    int px = x + i;
+    if (px < 0 || px >= bw)
+      continue;
     /* Gradient from Sky Blue to Soft Pink */
     uint8_t r = 187 + (255 - 187) * i / len;
     uint8_t g = 226 + (173 - 226) * i / len;
     uint8_t b = 249 + (240 - 249) * i / len;
-    buffer[y * bw + (x + i)] = RGBA(r, g, b, 255);
+    buffer[y * bw + px] = RGBA(r, g, b, 255);
   }
 }
 
-void gfx_fill_circle_buffer(uint32_t *buffer, int bw, int cx, int cy, int r,
-                            uint32_t color) {
+void gfx_fill_circle_buffer(uint32_t *buffer, int bw, int bh, int cx, int cy,
+                            int r, uint32_t color) {
   for (int y = -r; y < r; y++) {
+    int py = cy + y;
+    if (py < 0 || py >= bh)
+      continue;
     for (int x = -r; x < r; x++) {
+      int px = cx + x;
+      if (px < 0 || px >= bw)
+        continue;
       if (x * x + y * y <= r * r) {
-        buffer[(cy + y) * bw + (cx + x)] = color;
+        buffer[py * bw + px] = color;
       }
     }
   }

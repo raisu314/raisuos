@@ -5,9 +5,10 @@
 
 static void on_paint(window_t *win) {
   /* Mica / Light Background */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       COLOR_MAIN);
-  gfx_draw_iridescent_line(win->buffer, win->width, 0, 0, win->width);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, COLOR_MAIN);
+  gfx_draw_iridescent_line(win->buffer, win->width, win->height, 0, 0,
+                           win->width);
 
   /* Photo Grid Placeholder */
   for (int r = 0; r < 2; r++) {
@@ -17,12 +18,12 @@ static void on_paint(window_t *win) {
       /* Rainbow Segmented Placeholder */
       gfx_fill_rounded_rect_buffer(win->buffer, win->width, win->height, x, y,
                                    90, 70, 4, RGBA(240, 245, 255, 255));
-      gfx_fill_circle_buffer(win->buffer, win->width, x + 45, y + 35, 15,
-                             COLOR_SUB);
+      gfx_fill_circle_buffer(win->buffer, win->width, win->height, x + 45,
+                             y + 35, 15, COLOR_SUB);
     }
   }
 
-  font_draw_string_buffer(win->buffer, win->width, 10, 210,
+  font_draw_string_buffer(win->buffer, win->width, win->height, 10, 210,
                           "4 Items - Camera Roll", RGBA(150, 150, 160, 255), 0);
 }
 

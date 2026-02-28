@@ -8,8 +8,8 @@
 
 static void sysmon_paint(window_t *win) {
   /* High-Pure White Background */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       COLOR_MAIN);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, COLOR_MAIN);
 
   int y = 20;
   int x = 20;

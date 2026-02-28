@@ -5,16 +5,16 @@
 
 static void on_paint(window_t *win) {
   /* Dark Mica / Iridescent Background */
-  gfx_fill_rect_buffer(win->buffer, win->width, 0, 0, win->width, win->height,
-                       RGBA(30, 35, 45, 255));
-  gfx_draw_iridescent_line(win->buffer, win->width, 0, win->height - 4,
-                           win->width);
+  gfx_fill_rect_buffer(win->buffer, win->width, win->height, 0, 0, win->width,
+                       win->height, RGBA(30, 35, 45, 255));
+  gfx_draw_iridescent_line(win->buffer, win->width, win->height, 0,
+                           win->height - 4, win->width);
 
   /* Spectrum Visualizer (Placeholder) */
   for (int i = 0; i < 30; i++) {
     int h = 20 + (i % 5) * 10;
-    gfx_fill_rect_buffer(win->buffer, win->width, 20 + i * 10, 150 - h, 6, h,
-                         COLOR_SUB);
+    gfx_fill_rect_buffer(win->buffer, win->width, win->height, 20 + i * 10,
+                         150 - h, 6, h, COLOR_SUB);
   }
 
   font_draw_string_buffer(win->buffer, win->width, 20, 180,
