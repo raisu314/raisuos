@@ -15,7 +15,7 @@ static void sysmon_paint(window_t *win) {
   int x = 20;
 
   /* ADNWS Blue Accent for Headers */
-  font_draw_string_buffer(win->buffer, win->width, x, y,
+  font_draw_string_buffer(win->buffer, win->width, win->height, x, y,
                           "ADNWS System Overview", RGBA(0, 100, 200, 255), 0);
   y += 30;
 
@@ -25,11 +25,11 @@ static void sysmon_paint(window_t *win) {
   strcat(uptime, num);
   strcat(uptime, " seconds");
 
-  font_draw_string_buffer(win->buffer, win->width, x, y, uptime,
+  font_draw_string_buffer(win->buffer, win->width, win->height, x, y, uptime,
                           COLOR_TEXT_DARK, 0);
   y += 20;
 
-  font_draw_string_buffer(win->buffer, win->width, x, y,
+  font_draw_string_buffer(win->buffer, win->width, win->height, x, y,
                           "Architecture: x64 v1.0.0", COLOR_TEXT_DARK, 0);
   y += 20;
 
@@ -45,7 +45,7 @@ static void sysmon_paint(window_t *win) {
   strcat(mem, num);
   strcat(mem, " KB");
 
-  font_draw_string_buffer(win->buffer, win->width, x, y, mem, COLOR_TEXT_DARK,
+  font_draw_string_buffer(win->buffer, win->width, win->height, x, y, mem, COLOR_TEXT_DARK,
                           0);
   y += 20;
 

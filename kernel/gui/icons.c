@@ -79,13 +79,15 @@ void icons_draw(uint32_t *buffer, int bw, int bh, int x, int y, int size,
     /* 2x2 grid */
     gfx_fill_rounded_rect_buffer(buffer, bw, bh, x, y, size, size, 6,
                                  RGBA(240, 245, 255, 255));
-    gfx_fill_rect_buffer(buffer, bw, x + 4, y + 4, (size - 12) / 2,
+    gfx_fill_rect_buffer(buffer, bw, bh, x + 4, y + 4, (size - 12) / 2,
                          (size - 12) / 2, accent);
-    gfx_fill_rect_buffer(buffer, bw, x + size / 2 + 2, y + 4, (size - 12) / 2,
-                         (size - 12) / 2, RGBA(150, 150, 160, 255));
-    gfx_fill_rect_buffer(buffer, bw, x + 4, y + size / 2 + 2, (size - 12) / 2,
-                         (size - 12) / 2, RGBA(150, 150, 160, 255));
-    gfx_fill_rect_buffer(buffer, bw, x + size / 2 + 2, y + size / 2 + 2,
+    gfx_fill_rect_buffer(buffer, bw, bh, x + size / 2 + 2, y + 4,
+                         (size - 12) / 2, (size - 12) / 2,
+                         RGBA(150, 150, 160, 255));
+    gfx_fill_rect_buffer(buffer, bw, bh, x + 4, y + size / 2 + 2,
+                         (size - 12) / 2, (size - 12) / 2,
+                         RGBA(150, 150, 160, 255));
+    gfx_fill_rect_buffer(buffer, bw, bh, x + size / 2 + 2, y + size / 2 + 2,
                          (size - 12) / 2, (size - 12) / 2,
                          RGBA(255, 150, 100, 255));
     break;

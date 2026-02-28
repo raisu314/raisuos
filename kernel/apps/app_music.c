@@ -17,9 +17,9 @@ static void on_paint(window_t *win) {
                          150 - h, 6, h, COLOR_SUB);
   }
 
-  font_draw_string_buffer(win->buffer, win->width, 20, 180,
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, 180,
                           "Raisu Beats - LoFi", COLOR_MAIN, 0);
-  font_draw_string_buffer(win->buffer, win->width, 20, 200, "02:45 / 04:00",
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, 200, "02:45 / 04:00",
                           RGBA(180, 180, 190, 255), 0);
 }
 

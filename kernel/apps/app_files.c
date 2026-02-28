@@ -9,22 +9,22 @@ static void files_paint(window_t *win) {
       win->height - TITLE_BAR_HEIGHT, RGBA(240, 240, 240, 255));
 
   int y = TITLE_BAR_HEIGHT + 10;
-  font_draw_string_buffer(win->buffer, win->width, 10, y, "A:/ (initrd)",
-                          RGBA(0, 0, 0, 255), 0);
+  font_draw_string_buffer(win->buffer, win->width, win->height, 10, y,
+                          "A:/ (initrd)", RGBA(0, 0, 0, 255), 0);
   y += 20;
 
   /* Mock filesystem */
-  font_draw_string_buffer(win->buffer, win->width, 20, y, "[DIR]  System",
-                          RGBA(50, 50, 200, 255), 0);
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, y,
+                          "[DIR]  System", RGBA(50, 50, 200, 255), 0);
   y += 15;
-  font_draw_string_buffer(win->buffer, win->width, 20, y, "[DIR]  Users",
-                          RGBA(50, 50, 200, 255), 0);
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, y,
+                          "[DIR]  Users", RGBA(50, 50, 200, 255), 0);
   y += 15;
-  font_draw_string_buffer(win->buffer, win->width, 20, y,
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, y,
                           "[FILE] config.ini  (4 KB)", RGBA(50, 50, 50, 255),
                           0);
   y += 15;
-  font_draw_string_buffer(win->buffer, win->width, 20, y,
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, y,
                           "[FILE] readme.txt  (1 KB)", RGBA(50, 50, 50, 255),
                           0);
   y += 15;

@@ -17,9 +17,9 @@ static void on_paint(window_t *win) {
   gfx_draw_iridescent_line(win->buffer, win->width, win->height, cx, cy, 70);
 
   /* Digital Readout */
-  font_draw_string_buffer(win->buffer, win->width, cx - 40, cy + 90, "20:52:50",
+  font_draw_string_buffer(win->buffer, win->width, win->height, cx - 40, cy + 90, "20:52:50",
                           COLOR_TEXT_DARK, 0);
-  font_draw_string_buffer(win->buffer, win->width, cx - 35, cy + 110,
+  font_draw_string_buffer(win->buffer, win->width, win->height, cx - 35, cy + 110,
                           "Tokyo, JP", RGBA(150, 150, 160, 255), 0);
 }
 

@@ -19,9 +19,9 @@ static void on_paint(window_t *win) {
                          win->width, 1, RGBA(230, 235, 245, 255));
   }
 
-  font_draw_string_buffer(win->buffer, win->width, 10, 15, "Journal - Feb 28",
+  font_draw_string_buffer(win->buffer, win->width, win->height, 10, 15, "Journal - Feb 28",
                           RGBA(150, 155, 170, 255), 0);
-  font_draw_string_buffer(win->buffer, win->width, 20, 45,
+  font_draw_string_buffer(win->buffer, win->width, win->height, 20, 45,
                           "Today I am building RaisuOS v1.0.0!",
                           COLOR_TEXT_DARK, 0);
 }

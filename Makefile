@@ -1,9 +1,9 @@
 # RaisuOS Makefile
 # x86_64 kernel build system
 
-CC = x86_64-elf-gcc
+CC ?= gcc
 AS = nasm
-LD = x86_64-elf-ld
+LD ?= ld
 
 KERNEL_DIR = kernel
 BUILD_DIR = build
@@ -37,6 +37,7 @@ C_SRCS = $(KERNEL_DIR)/kernel.c \
          $(KERNEL_DIR)/gui/desktop.c \
          $(KERNEL_DIR)/gui/taskbar.c \
          $(KERNEL_DIR)/gui/launcher.c \
+         $(KERNEL_DIR)/gui/icons.c \
           $(KERNEL_DIR)/apps/app_terminal.c \
           $(KERNEL_DIR)/apps/app_editor.c \
           $(KERNEL_DIR)/apps/app_files.c \

@@ -17,14 +17,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Download pre-built x86_64-elf cross-compiler
-RUN mkdir -p /opt/cross && \
-    curl -L "https://newos.org/toolchains/x86_64-elf-7.5.0-Linux-x86_64.tar.xz" \
-    -o /tmp/cross.tar.xz && \
-    tar -xf /tmp/cross.tar.xz -C /opt/cross --strip-components=1 && \
-    rm /tmp/cross.tar.xz
-
-ENV PATH="/opt/cross/bin:${PATH}"
+# Use system GCC for build (compatible with freestanding)
+ENV CC=gcc
+ENV LD=ld
+ENV PATH="/usr/bin:${PATH}"
 
 WORKDIR /raisuos
 COPY . .

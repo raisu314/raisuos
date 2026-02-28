@@ -19,12 +19,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential nasm xorriso grub-pc-bin grub-common mtools curl
     
-    - name: Setup cross-compiler
-      run: |
-        mkdir -p $HOME/opt/cross
-        curl -L "https://newos.org/toolchains/x86_64-elf-7.5.0-Linux-x86_64.tar.xz" -o /tmp/cross.tar.xz
-        tar -xf /tmp/cross.tar.xz -C $HOME/opt/cross --strip-components=1
-        echo "$HOME/opt/cross/bin" >> $GITHUB_PATH
+    - name: Build kernel
+      run: make all CC=gcc LD=ld
     
     - name: Build kernel
       run: make all
