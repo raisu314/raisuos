@@ -10,7 +10,6 @@
 #include "vbe.h"
 #include "window.h"
 
-
 static int tb_y = 0;
 static bool launcher_open = false;
 
@@ -34,7 +33,7 @@ void taskbar_draw(void) {
   /* Draw Desktop Number */
   char desk_str[16];
   strcpy(desk_str, "D");
-  char num[2];
+  char num[16];
   itoa(wm_get_desktop() + 1, num, 10);
   strcpy(desk_str + 1, num);
   font_draw_string(60, tb_y + 16, desk_str, RGBA(50, 50, 50, 255), 0);

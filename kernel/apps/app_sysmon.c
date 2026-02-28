@@ -6,7 +6,6 @@
 #include "string.h"
 #include "timer.h"
 
-
 static void sysmon_paint(window_t *win) {
   gfx_fill_rect_buffer(win->buffer, win->width, 0, TITLE_BAR_HEIGHT, win->width,
                        win->height - TITLE_BAR_HEIGHT,
@@ -73,15 +72,6 @@ static void sysmon_paint(window_t *win) {
 }
 
 static void sysmon_close(window_t *win) { wm_destroy_window(win); }
-
-static char *strcat(char *dest, const char *src) {
-  char *rd = dest;
-  while (*dest)
-    dest++;
-  while ((*dest++ = *src++))
-    ;
-  return rd;
-}
 
 void app_sysmon_launch(void) {
   window_t *win = wm_create_window(i18n_get(STR_SYSMON), 150, 150, 350, 250,

@@ -10,9 +10,9 @@ BUILD_DIR = build
 ISO_DIR = iso
 
 CFLAGS = -std=c11 -ffreestanding -O2 -Wall -Wextra \
-         -I$(KERNEL_DIR)/include -fno-exceptions -fno-stack-protector \
-         -nostdlib -nostdinc -fno-builtin -fno-pie \
-         -mcmodel=kernel -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -c
+         -I$(KERNEL_DIR)/include -fno-stack-protector \
+         -nostdlib -fno-builtin -fno-pie \
+         -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -c
 
 ASFLAGS = -f elf64
 LDFLAGS = -n -T $(KERNEL_DIR)/arch/x86_64/linker.ld -nostdlib -z max-page-size=0x1000

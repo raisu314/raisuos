@@ -73,6 +73,15 @@ char *strncpy(char *dest, const char *src, size_t n) {
   return dest;
 }
 
+char *strcat(char *dest, const char *src) {
+  char *rd = dest;
+  while (*dest)
+    dest++;
+  while ((*dest++ = *src++))
+    ;
+  return rd;
+}
+
 void itoa(int64_t value, char *str, int base) {
   char *ptr = str;
   char *ptr1 = str;
